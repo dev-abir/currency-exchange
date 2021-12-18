@@ -29,10 +29,10 @@ function Input(props) {
                     }
                     label="Amount"
                     variant="outlined"
-                    value={
+                    value={Math.round(
                         props.amountInINR *
                             props.exchangeRates[props.currency] || 0
-                    }
+                    )}
                 />
             </Grid>
 
