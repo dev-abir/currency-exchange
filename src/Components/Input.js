@@ -31,8 +31,7 @@ function Input(props) {
                     variant="outlined"
                     value={
                         props.amountInINR *
-                            props.exchangeRates[props.currency] ||
-                        props.exchangeRates[props.currency]
+                            props.exchangeRates[props.currency] || 0
                     }
                 />
             </Grid>
@@ -41,7 +40,7 @@ function Input(props) {
                 <FormControl>
                     <InputLabel id="label">Currency</InputLabel>
                     <Select
-                    style={{width: "150px"}}
+                        style={{ width: "150px" }}
                         labelId="label"
                         value={props.currency}
                         label="Currency"
