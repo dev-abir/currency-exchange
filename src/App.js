@@ -43,21 +43,31 @@ function App() {
     const [currency1, setCurrency1] = React.useState("usd");
 
     React.useEffect(() => {
-        fetchWithFallback([
-            "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.min.json",
-            "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json",
-        ])
-            .then((response) => response.json())
-            .then((data) => setCurrencies(data));
+        async function fetchData() {
+            // fake sleep :)
+            await new Promise((r) => setTimeout(r, 1000));
+            fetchWithFallback([
+                "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.min.json",
+                "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json",
+            ])
+                .then((response) => response.json())
+                .then((data) => setCurrencies(data));
+        }
+        fetchData();
     }, []);
 
     React.useEffect(() => {
-        fetchWithFallback([
-            "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.min.json",
-            "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.json",
-        ])
-            .then((response) => response.json())
-            .then((data) => setExchangeRates(data.inr));
+        async function fetchData() {
+            // fake sleep :)
+            await new Promise((r) => setTimeout(r, 1000));
+            fetchWithFallback([
+                "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.min.json",
+                "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.json",
+            ])
+                .then((response) => response.json())
+                .then((data) => setExchangeRates(data.inr));
+        }
+        fetchData();
     }, []);
 
     const onChange0 = (e, exchangeRate) => {
@@ -114,7 +124,7 @@ function App() {
                     Convert your currency
                 </Typography>
                 {currencies.length === 0 || exchangeRates.length === 0 ? (
-                    <CircularProgress disableShrink />
+                    <CircularProgress />
                 ) : (
                     <Grid
                         container
