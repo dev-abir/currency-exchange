@@ -6,6 +6,8 @@ Thanks to [this](https://github.com/fawazahmed0/currency-api#readme) repo for th
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+# **[Live demo](https://dev-abir.github.io/currency-exchange/)**
+
 ## Steps to run
 
 In the project directory, you can run:
