@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 
 function Input(props) {
+    // TODO: array lookups is expensive (props.exchangeRates[props.currency])
     return (
         <Grid
             container
@@ -29,10 +30,7 @@ function Input(props) {
                     }
                     label="Amount"
                     variant="outlined"
-                    value={
-                        props.amountInINR *
-                            props.exchangeRates[props.currency] || 0
-                    }
+                    value={props.amount || 0}
                 />
             </Grid>
 
@@ -44,7 +42,12 @@ function Input(props) {
                         labelId="label"
                         value={props.currency}
                         label="Currency"
-                        onChange={(e) => props.onCurrencyChange(e)}
+                        onChange={(e) =>
+                            props.onCurrencyChange(
+                                e,
+                                props.exchangeRates[props.currency]
+                            )
+                        }
                     >
                         {Object.entries(props.currencies).map((obj, i) => (
                             <MenuItem key={i} value={obj[0]}>
@@ -63,7 +66,7 @@ Input.propTypes = {
     currencies: PropTypes.object.isRequired,
     exchangeRates: PropTypes.object.isRequired,
     onAmountChange: PropTypes.func.isRequired,
-    amountInINR: PropTypes.number,
+    amount: PropTypes.number,
     currency: PropTypes.string.isRequired,
     onCurrencyChange: PropTypes.func.isRequired,
 };

@@ -37,8 +37,8 @@ function App() {
     // TODO: better state management ?
     const [currencies, setCurrencies] = React.useState([]);
     const [exchangeRates, setExchangeRates] = React.useState([]);
-    const [amountInINR0, setAmountInINR0] = React.useState();
-    const [amountInINR1, setAmountInINR1] = React.useState();
+    const [amount0, setAmount0] = React.useState();
+    const [amount1, setAmount1] = React.useState();
     const [currency0, setCurrency0] = React.useState("inr");
     const [currency1, setCurrency1] = React.useState("usd");
 
@@ -97,24 +97,26 @@ function App() {
         fetchData();
     }, []);
 
+    // TODO: array lookup is expensive...
+    // same issue in some lines of Input.js, as well
     const onChange0 = (e, exchangeRate) => {
-        setAmountInINR0(e.target.value / exchangeRate);
-        setAmountInINR1(e.target.value / exchangeRate);
+        setAmount0(e.target.value);
+        setAmount1((e.target.value * exchangeRates[currency1]) / exchangeRate);
     };
 
     const onChange1 = (e, exchangeRate) => {
-        setAmountInINR1(e.target.value / exchangeRate);
-        setAmountInINR0(e.target.value / exchangeRate);
+        setAmount1(e.target.value);
+        setAmount0((e.target.value * exchangeRates[currency0]) / exchangeRate);
     };
 
-    const onCurrencyChange0 = (e) => {
+    const onCurrencyChange0 = (e, oldExchangeRate) => {
         setCurrency0(e.target.value);
-        setAmountInINR0(amountInINR0 / exchangeRates[e.target.value]);
+        setAmount0((amount0 * exchangeRates[e.target.value]) / oldExchangeRate);
     };
 
-    const onCurrencyChange1 = (e) => {
+    const onCurrencyChange1 = (e, oldExchangeRate) => {
         setCurrency1(e.target.value);
-        setAmountInINR1(amountInINR1 / exchangeRates[e.target.value]);
+        setAmount1((amount1 * exchangeRates[e.target.value]) / oldExchangeRate);
     };
 
     return (
@@ -165,7 +167,7 @@ function App() {
                                 currencies={currencies}
                                 exchangeRates={exchangeRates}
                                 onAmountChange={onChange0}
-                                amountInINR={amountInINR0}
+                                amount={amount0}
                                 currency={currency0}
                                 onCurrencyChange={onCurrencyChange0}
                             />
@@ -176,7 +178,7 @@ function App() {
                                 currencies={currencies}
                                 exchangeRates={exchangeRates}
                                 onAmountChange={onChange1}
-                                amountInINR={amountInINR1}
+                                amount={amount1}
                                 currency={currency1}
                                 onCurrencyChange={onCurrencyChange1}
                             />
