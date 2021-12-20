@@ -37,8 +37,8 @@ function App() {
     // TODO: better state management ?
     const [currencies, setCurrencies] = React.useState([]);
     const [exchangeRates, setExchangeRates] = React.useState([]);
-    const [amount0, setAmount0] = React.useState();
-    const [amount1, setAmount1] = React.useState();
+    const [amount0, setAmount0] = React.useState(0);
+    const [amount1, setAmount1] = React.useState(0);
     const [currency0, setCurrency0] = React.useState("inr");
     const [currency1, setCurrency1] = React.useState("usd");
 
@@ -100,23 +100,35 @@ function App() {
     // TODO: array lookup is expensive...
     // same issue in some lines of Input.js, as well
     const onChange0 = (e, exchangeRate) => {
-        setAmount0(e.target.value);
+        // typecast to Number to supress wrong prop type warning
+        setAmount0(Number(e.target.value));
         setAmount1((e.target.value * exchangeRates[currency1]) / exchangeRate);
     };
 
     const onChange1 = (e, exchangeRate) => {
-        setAmount1(e.target.value);
+        // typecast to Number to supress wrong prop type warning
+        setAmount1(Number(e.target.value));
         setAmount0((e.target.value * exchangeRates[currency0]) / exchangeRate);
     };
 
-    const onCurrencyChange0 = (e, oldExchangeRate) => {
-        setCurrency0(e.target.value);
-        setAmount0((amount0 * exchangeRates[e.target.value]) / oldExchangeRate);
+    // TODO: again, array lookups are slow :(
+    // Ugliness.... :)
+    const getCurrencyCodeFromName = (name) => {
+        return Object.entries(currencies).filter(
+            (obj) => obj[1] === name
+        )[0][0];
     };
 
-    const onCurrencyChange1 = (e, oldExchangeRate) => {
-        setCurrency1(e.target.value);
-        setAmount1((amount1 * exchangeRates[e.target.value]) / oldExchangeRate);
+    const onCurrencyChange0 = (e, newCurrency, oldExchangeRate) => {
+        const currencyCode = getCurrencyCodeFromName(newCurrency);
+        setCurrency0(currencyCode);
+        setAmount0((amount0 * exchangeRates[currencyCode]) / oldExchangeRate);
+    };
+
+    const onCurrencyChange1 = (e, newCurrency, oldExchangeRate) => {
+        const currencyCode = getCurrencyCodeFromName(newCurrency);
+        setCurrency1(currencyCode);
+        setAmount1((amount1 * exchangeRates[currencyCode]) / oldExchangeRate);
     };
 
     return (

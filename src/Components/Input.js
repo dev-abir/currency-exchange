@@ -7,6 +7,7 @@ import {
     TextField,
     FormControl,
     InputLabel,
+    Autocomplete,
 } from "@mui/material";
 
 function Input(props) {
@@ -30,12 +31,32 @@ function Input(props) {
                     }
                     label="Amount"
                     variant="outlined"
-                    value={props.amount || 0}
+                    value={props.amount}
                 />
             </Grid>
 
             <Grid item xs={6}>
-                <FormControl>
+                {/* TODO: disablePortal ? */}
+                <Autocomplete
+                    value={props.currencies[props.currency]}
+                    onChange={(e, newValue) =>
+                        props.onCurrencyChange(
+                            e,
+                            newValue,
+                            props.exchangeRates[props.currency]
+                        )
+                    }
+                    disablePortal
+                    disableClearable
+                    id="combo-box-demo"
+                    options={Object.entries(props.currencies).map(
+                        (obj) => obj[1]
+                    )}
+                    renderInput={(params) => (
+                        <TextField {...params} label="Currency" />
+                    )}
+                />
+                {/* <FormControl>
                     <InputLabel id="label">Currency</InputLabel>
                     <Select
                         style={{ width: "150px" }}
@@ -55,11 +76,15 @@ function Input(props) {
                             </MenuItem>
                         ))}
                     </Select>
-                </FormControl>
+                </FormControl> */}
             </Grid>
         </Grid>
     );
 }
+
+Input.defaultProps = {
+    amount: 0,
+};
 
 // TODO: proper types
 Input.propTypes = {
