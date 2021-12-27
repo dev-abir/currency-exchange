@@ -144,8 +144,9 @@ function App() {
                         gap={3}
                         justifyContent="space-evenly"
                         alignItems="center"
+                        style={{ padding: "1rem" }}
                     >
-                        <Grid item>
+                        <Grid item xs={12} md={6}>
                             <Input
                                 currencies={currencies}
                                 exchangeRates={exchangeRates}
@@ -156,7 +157,7 @@ function App() {
                             />
                         </Grid>
 
-                        <Grid item>
+                        <Grid item xs={12} md={6}>
                             <Input
                                 currencies={currencies}
                                 exchangeRates={exchangeRates}

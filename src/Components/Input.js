@@ -5,9 +5,10 @@ import { Grid, TextField, Autocomplete } from "@mui/material";
 function Input(props) {
     // TODO: array lookups is expensive (props.exchangeRates[props.currency])
     return (
-        <Grid container direction="row" wrap="nowrap" gap={1} style={{ padding: "5px" }}>
+        <Grid container direction="row" wrap="nowrap" gap={1}>
             <Grid item xs={6}>
                 <TextField
+                    style={{ width: "100%" }}
                     type="number"
                     onChange={(e) => props.onAmountChange(e, props.exchangeRates[props.currency])}
                     label="Amount"
@@ -25,7 +26,6 @@ function Input(props) {
                     }
                     disablePortal
                     disableClearable
-                    id="combo-box-demo"
                     options={Object.entries(props.currencies).map((obj) => obj[1])}
                     renderInput={(params) => <TextField {...params} label="Currency" />}
                 />
