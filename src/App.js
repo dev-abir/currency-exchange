@@ -1,17 +1,9 @@
-import {
-    Grid,
-    createTheme,
-    ThemeProvider,
-    IconButton,
-    CircularProgress,
-    Link,
-    Typography,
-} from "@mui/material";
-import Paper from "@mui/material/Paper";
+import { Grid, createTheme, ThemeProvider, IconButton, CircularProgress } from "@mui/material";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import React from "react";
 import Input from "./Components/Input";
+import Header from "./Components/Header";
 
 const fetchWithFallback = async (links, obj) => {
     let response;
@@ -25,8 +17,7 @@ const fetchWithFallback = async (links, obj) => {
 };
 
 function App() {
-    const defaultMode = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
+    const defaultMode = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
     const [mode, setMode] = React.useState(defaultMode);
@@ -72,7 +63,7 @@ function App() {
     React.useEffect(() => {
         async function fetchData() {
             // fake sleep :)
-            await new Promise((r) => setTimeout(r, 1000));
+            await new Promise((r) => setTimeout(r, 500));
             fetchWithFallback([
                 "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.min.json",
                 "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies.json",
@@ -86,7 +77,7 @@ function App() {
     React.useEffect(() => {
         async function fetchData() {
             // fake sleep :)
-            await new Promise((r) => setTimeout(r, 1000));
+            await new Promise((r) => setTimeout(r, 500));
             fetchWithFallback([
                 "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.min.json",
                 "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/inr.json",
@@ -114,9 +105,7 @@ function App() {
     // TODO: again, array lookups are slow :(
     // Ugliness.... :)
     const getCurrencyCodeFromName = (name) => {
-        return Object.entries(currencies).filter(
-            (obj) => obj[1] === name
-        )[0][0];
+        return Object.entries(currencies).filter((obj) => obj[1] === name)[0][0];
     };
 
     const onCurrencyChange0 = (e, newCurrency, oldExchangeRate) => {
@@ -132,38 +121,20 @@ function App() {
     };
 
     return (
-        // <div
-        //     style={{
-        //         // to make the main paper centered
-        //         backgroundColor: theme.palette.background.default,
-        //         display: "flex",
-        //         flexDirection: "row",
-        //         justifyContent: "center",
-        //         alignItems: "center",
-        //         height: "100vh",
-        //     }}
-        // >
         <ThemeProvider theme={theme}>
-            <Paper
+            <div
                 // to make the main grid centered
                 style={{
                     backgroundColor: theme.palette.background.default,
-                    height: "100vh",
+                    minHeight: "100vh",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
                 }}
             >
-                <Typography
-                    style={{
-                        position: "absolute",
-                        top: "100px",
-                    }}
-                    variant="h4"
-                >
-                    Convert your currency
-                </Typography>
+                <Header />
+
                 {currencies.length === 0 || exchangeRates.length === 0 ? (
                     <CircularProgress />
                 ) : (
@@ -198,39 +169,19 @@ function App() {
                     </Grid>
                 )}
 
-                <Link
-                    style={{
-                        position: "absolute",
-                        top: "50px",
-                        left: "50px",
-                    }}
-                    href="https://github.com/fawazahmed0/currency-api#readme"
-                    target="_blank"
-                    rel="noopener"
-                    // rel="noopener" prevents the new page from being able to access
-                    // the window.opener property and ensures it runs in a separate
-                    // process. Without this, the target page can potentially redirect
-                    // your page to a malicious URL.
-                >
-                    [Link to API]
-                </Link>
+                {/* FIXME: This button jumps up, when a keyboard appears
+                (while typing in mobiles) (try to change the currency of 2nd input) */}
                 <IconButton
                     style={{
-                        position: "absolute",
-                        top: "50px",
+                        position: "fixed",
+                        bottom: "50px",
                         right: "50px",
                     }}
-                    onClick={(e) => {
-                        mode === "dark" ? setMode("light") : setMode("dark");
-                    }}
+                    onClick={(e) => (mode === "dark" ? setMode("light") : setMode("dark"))}
                 >
-                    {theme.palette.mode === "dark" ? (
-                        <Brightness7Icon />
-                    ) : (
-                        <Brightness4Icon />
-                    )}
+                    {theme.palette.mode === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
                 </IconButton>
-            </Paper>
+            </div>
         </ThemeProvider>
     );
 }
